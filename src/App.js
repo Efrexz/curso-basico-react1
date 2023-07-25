@@ -15,7 +15,7 @@ const defaultTodos = [
 
 function App() {
 
-  const [todos] = React.useState([...defaultTodos]);
+  const [todos, setTodos] = React.useState([...defaultTodos]);
   const [searchValue, setSearchValue] = React.useState("");
 
   //cantidad de tareas pendientes y completadas
@@ -32,8 +32,23 @@ function App() {
         }
   );
 
+  const completeTodo = (task) => {
+    const newTodos = [...todos];
+    const todoIndex = newTodos.findIndex(
+      (todo) => todo.text === task
+    );
+    newTodos[todoIndex].completed = !newTodos[todoIndex].completed;
+    setTodos(newTodos);
+  }
 
-  console.log(searchValue);
+  const deleteTodo = (task) => {
+    const newTodos = [...todos];
+    const todoIndex = newTodos.findIndex(
+      (todo) => todo.text === task
+    );
+    newTodos.splice(todoIndex,1);
+    setTodos(newTodos);
+  }
 
   return (
     <>
@@ -52,7 +67,10 @@ function App() {
           <TodoItem
             key={todo.text}
             text={todo.text}
-            completed={todo.completed} />
+            completed={todo.completed}
+            onComplete = {() => completeTodo(todo.text)}
+            onDelete = {() => deleteTodo(todo.text)}
+            />
         ))}
       </TodoList>
 
