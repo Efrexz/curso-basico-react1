@@ -6,16 +6,26 @@ import { TodoList } from './components/TodoList/TodoList';
 import { CreateTodoButton } from "./components/CreateTodoButton/CreateTodoButton";
 
 
-const defaultTodos = [
-  {text: " Cortar cebolla", completed: false},
-  {text: " Tomar Agua", completed: false},
-  {text: " gym", completed: true},
-  {text: " estudiar", completed: true},
-];
+// const defaultTodos = [
+//   {text: " Cortar tomate", completed: false},
+//   {text: " Tomar Agua", completed: false},
+//   {text: " gym", completed: true},
+//   {text: " estudiar", completed: true},
+// ];
+
+
+//   localStorage.setItem("TodosList" , JSON.stringify(defaultTodos));
 
 function App() {
 
-  const [todos, setTodos] = React.useState([...defaultTodos]);
+  let parsedTodos;
+  if(!localStorage.getItem("TodosList")){//si no hay nada en localstorage enviamos un array para que no se rompa la app
+    parsedTodos = [];//enviamos array para que no se rompa la app
+  }else{//convertimos el string en un array para poder iterar
+    parsedTodos = JSON.parse(localStorage.getItem("TodosList"));
+  }
+
+  const [todos, setTodos] = React.useState([...parsedTodos]);
   const [searchValue, setSearchValue] = React.useState("");
 
   //cantidad de tareas pendientes y completadas
@@ -32,13 +42,19 @@ function App() {
         }
   );
 
+  function saveTodos(newTodos){//funcion para actualizar localstorage cada vez que agreguemos o eliminemos una task
+    const localStorageStringify = JSON.stringify(newTodos);
+    localStorage.setItem("TodosList" , localStorageStringify);
+    setTodos(newTodos)
+  };
+
   const completeTodo = (task) => {
     const newTodos = [...todos];
     const todoIndex = newTodos.findIndex(
       (todo) => todo.text === task
     );
     newTodos[todoIndex].completed = !newTodos[todoIndex].completed;
-    setTodos(newTodos);
+    saveTodos(newTodos);
   }
 
   const deleteTodo = (task) => {
@@ -47,7 +63,7 @@ function App() {
       (todo) => todo.text === task
     );
     newTodos.splice(todoIndex,1);
-    setTodos(newTodos);
+    saveTodos(newTodos);
   }
 
   return (
