@@ -16,16 +16,32 @@ import { CreateTodoButton } from "./components/CreateTodoButton/CreateTodoButton
 
 //   localStorage.setItem("TodosList" , JSON.stringify(defaultTodos));
 
-function App() {
+function useLocalStorage(itemName, initialValue) {
 
-  let parsedTodos;
-  if(!localStorage.getItem("TodosList")){//si no hay nada en localstorage enviamos un array para que no se rompa la app
-    parsedTodos = [];//enviamos array para que no se rompa la app
+  const localStorageItem = localStorage.getItem(itemName)
+
+  let parsedItem;
+
+  if(!localStorageItem){//si no hay nada en localstorage enviamos un array para que no se rompa la app
+    localStorage.setItem(itemName, JSON.stringify(initialValue))
+    parsedItem = initialValue;//enviamos array para que no se rompa la app
   }else{//convertimos el string en un array para poder iterar
-    parsedTodos = JSON.parse(localStorage.getItem("TodosList"));
+    parsedItem = JSON.parse(localStorageItem);
   }
 
-  const [todos, setTodos] = React.useState([...parsedTodos]);
+  const [item, setItem] = React.useState(parsedItem);
+
+  function saveItem(newItem){//funcion para actualizar localstorage cada vez que agreguemos o eliminemos una task
+    const localStorageStringify = JSON.stringify(newItem);
+    localStorage.setItem(itemName , localStorageStringify);
+    setItem(newItem)
+  };
+
+  return [item,saveItem];
+}
+
+function App() {
+  const [todos, saveTodos] = useLocalStorage("TodosList", [])
   const [searchValue, setSearchValue] = React.useState("");
 
   //cantidad de tareas pendientes y completadas
@@ -41,12 +57,6 @@ function App() {
       return todoText.includes(searchText);
         }
   );
-
-  function saveTodos(newTodos){//funcion para actualizar localstorage cada vez que agreguemos o eliminemos una task
-    const localStorageStringify = JSON.stringify(newTodos);
-    localStorage.setItem("TodosList" , localStorageStringify);
-    setTodos(newTodos)
-  };
 
   const completeTodo = (task) => {
     const newTodos = [...todos];
