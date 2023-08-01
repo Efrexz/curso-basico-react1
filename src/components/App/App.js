@@ -14,7 +14,14 @@ import { useLocalStorage } from "./useLocalStorage";
 //   localStorage.setItem("TodosList" , JSON.stringify(defaultTodos));
 
 function App() {
-  const [todos, saveTodos] = useLocalStorage("TodosList", [])
+
+  const {
+    item: todos,//asi podemos cambiar el nombre
+    saveItem: saveTodos,
+    error,
+    loading
+  } = useLocalStorage("TodosList", []);
+
   const [searchValue, setSearchValue] = React.useState("");
 
   //cantidad de tareas pendientes y completadas del titulo
@@ -51,6 +58,8 @@ function App() {
 
   return (
     <AppUI
+      loading = {loading}
+      error = {error}
       totalTodos = {totalTodos}
       completedTodos = { completedTodos}
       searchValue = { searchValue}
