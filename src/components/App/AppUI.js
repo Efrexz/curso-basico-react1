@@ -1,3 +1,4 @@
+import React from "react";
 import { TodoItem } from "../TodoItem/TodoItem";
 import { TodoCounter } from '../TodoCounter/TodoCounter';
 import { TodoInput } from '../TodoInput/TodoInput';
@@ -11,45 +12,45 @@ import { TodoContext } from "../TodoContext/TodoContext";
 
 
 
+
 function AppUI () {
+
+    const {
+        loading,
+        error,
+        searchedTodos,
+        completeTodo,
+        deleteTodo,
+    }= React.useContext(TodoContext);
+
     return (
         <>
             <TodoCounter />
             <TodoInput />
 
-            <TodoContext.Consumer>
-                {({
-                    loading,
-                    error,
-                    searchedTodos,
-                    completeTodo,
-                    deleteTodo,
-                }) => (
-                    <TodoList>
-                    {loading ? (<>
-                        <TodosLoading/>
-                        <TodosLoading/>
-                        <TodosLoading/>
-                        <TodosLoading/>
-                    </>)
-                    : null}
+            <TodoList>
+                {loading ? (<>
+                    <TodosLoading/>
+                    <TodosLoading/>
+                    <TodosLoading/>
+                    <TodosLoading/>
+                </>)
+                : null}
 
-                    {error ?  <TodosError/> : null}
-                    {(!loading && searchedTodos.length === 0)? <EmptyTodos/> : null}
+                {error ?  <TodosError/> : null}
+                {(!loading && searchedTodos.length === 0)? <EmptyTodos/> : null}
 
-                    {searchedTodos.map(todo => (
-                    //recorremos el array de searchedTodos que seria el array de las coincidencias y estas son las que renderizamos
-                    <TodoItem
-                        key={todo.text}
-                        text={todo.text}
-                        completed={todo.completed}
-                        onComplete = {() => completeTodo(todo.text)}
-                        onDelete = {() => deleteTodo(todo.text)}
-                    />
-                    ))}
-                </TodoList>
-                )}
-            </TodoContext.Consumer>
+                {searchedTodos.map(todo => (
+                //recorremos el array de searchedTodos que seria el array de las coincidencias y estas son las que renderizamos
+                <TodoItem
+                    key={todo.text}
+                    text={todo.text}
+                    completed={todo.completed}
+                    onComplete = {() => completeTodo(todo.text)}
+                    onDelete = {() => deleteTodo(todo.text)}
+                />
+                ))}
+            </TodoList>
 
             <CreateTodoButton/>
         </>
