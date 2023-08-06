@@ -12,6 +12,7 @@ function TodoProvider({children}) {//aqui encapsulamos la logica que queremos co
         } = useLocalStorage("TodosList", []);
 
     const [searchValue, setSearchValue] = React.useState("");
+    const [openModal, setOpenModal] = React.useState(false);
 
       //cantidad de tareas pendientes y completadas del titulo
     const completedTodos = todos.filter(todo =>
@@ -56,6 +57,8 @@ function TodoProvider({children}) {//aqui encapsulamos la logica que queremos co
             searchedTodos,
             completeTodo,
             deleteTodo,
+            openModal,
+            setOpenModal,
         }}>
             {children}
         </TodoContext.Provider>
