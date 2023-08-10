@@ -28,6 +28,15 @@ function TodoProvider({children}) {//aqui encapsulamos la logica que queremos co
             }
         );
 
+    const addTodo = (text) => {
+        const newTodos = [...todos];
+        newTodos.push({
+            text,
+            completed: false
+        })
+        saveTodos(newTodos);
+    }
+
     const completeTodo = (task) => {
         const newTodos = [...todos];
         const todoIndex = newTodos.findIndex(
@@ -55,6 +64,7 @@ function TodoProvider({children}) {//aqui encapsulamos la logica que queremos co
             searchValue,
             setSearchValue,
             searchedTodos,
+            addTodo,
             completeTodo,
             deleteTodo,
             openModal,

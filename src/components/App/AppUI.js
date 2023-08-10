@@ -8,6 +8,7 @@ import { TodosError } from '../TodosError/TodosError';
 import { EmptyTodos } from '../EmptyTodos/EmptyTodos';
 import { CreateTodoButton } from "../CreateTodoButton/CreateTodoButton";
 import { Modal } from "../Modal"
+import { TodoForm } from "../TodoForm/TodoForm";
 import { TodoContext } from "../TodoContext/TodoContext";
 
 
@@ -58,7 +59,7 @@ function AppUI () {
 
             {openModal ? (
                 <Modal>
-                    Funcionalidad xD
+                    <TodoForm />
                 </Modal>
             ) :
             null}
